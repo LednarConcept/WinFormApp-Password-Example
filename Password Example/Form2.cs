@@ -13,31 +13,28 @@ namespace Password_Example
     public partial class Form2 : Form
     {
 
-        System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer(); // Create a Timer that will be used to loop the game
 
         public Form2()
         {
             InitializeComponent();
 
-            gameTimer.Interval = 1000; // 1000ms ~ 1 UPS
+            gameTimer.Interval = 1000; // 1000ms ~ 1 Update Per Second
             gameTimer.Tick += new EventHandler(GameLoop);  // Attach the game loop to the timer
             gameTimer.Start();
         }
 
         private void GameLoop(object sender, EventArgs e)
         {
-            // 1. Update Game State
-            Update();
-
-            // 2. Redraw the screen
-            //Invalidate();  // Forces the form to redraw (calls the Paint event)
+            Update(); // This function is fired every 1 second
         }
 
-        int cookies = 0;
-        int clickLevel = 1;
-        int clickUpcost = 100;
-        int clickPower = 1;
-        int grandmaLevel = 0;
+        // Create integer values
+        int cookies = 0; // This will be the ingame currency
+        int clickLevel = 1; // This will be the level of click
+        int clickUpcost = 100; // This will be the upgrade cost
+        int clickPower = 1; // This is the power of the click
+        int grandmaLevel = 0; // Others will start as level 0 as to not earn when unbought
         int grandmaUpcost = 15;
         int grandmaPower = 1;
         int cookLevel = 0;
@@ -55,27 +52,28 @@ namespace Password_Example
 
         void Update()
         {
-            cookies += grandmaLevel * grandmaPower;
+            cookies += grandmaLevel * grandmaPower; // level times power equals income
             cookies += cookLevel * cookPower;
             cookies += vendorLevel * vendorPower;
             cookies += restaurantLevel * restaurantPower;
             cookies += factoryLevel * factoryPower;
-            lbl_cookieCount.Text = "Cookies: " + cookies.ToString();
+            lbl_cookieCount.Text = "Cookies: " + cookies.ToString(); // Update the cookie text
         }
 
         private void btn_bake_click(object sender, EventArgs e)
         {
-            cookies += clickLevel;
+            cookies += clickLevel; // Add cookies amount to the level of click
             lbl_cookieCount.Text = "Cookies: " + cookies.ToString();
         }
 
         private void btn_ClickUpgrade_Click(object sender, EventArgs e)
         {
-            if (cookies >= clickUpcost)
+            if (cookies >= clickUpcost) // Is cookies equal or more than the upgrade cost?
             {
-                cookies -= clickUpcost;
-                clickUpcost += (int)(clickUpcost * 1.2f);
-                clickLevel += 1;
+                cookies -= clickUpcost; // Subtract the cookies with upgrade cost
+                clickUpcost += (int)(clickUpcost * 1.2f); // Increase the price of upgrade
+                clickLevel += 1; // Increase the level of upgrade
+                // Update the text values to match the current state of each value
                 lbl_ClickUpgrade.Text = "Click Level: " + clickLevel;
                 lbl_ClickPower.Text = "Power: " + (clickLevel * clickPower) + "/click";
                 btn_ClickUpgrade.Text = "" + clickUpcost + " Cookies";
